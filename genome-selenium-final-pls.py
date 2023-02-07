@@ -1,3 +1,4 @@
+import argparse
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.by import By
@@ -5,6 +6,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
 import pandas as pd
+
 column_list = ['Chrom', 'Pos', 'ID', 'Ref', 'Alt','KHV', 'KHV-G', 
                'Region', 'Gene', 'Impact','AAChange']  
 df = pd.DataFrame(columns=column_list)
@@ -15,12 +17,12 @@ wait = WebDriverWait(driver, 20)
 
 def check_exists(sequence):
     driver.find_element(By.ID, "query").clear()     
-    driver.implicitly_wait(20)
+    driver.implicitly_wait(10)
     driver.find_element(By.ID, "query").send_keys(sequence)
     driver.find_element(By.ID, 'search-btn').click()
     driver.implicitly_wait(20) 
     check_sequence = driver.find_elements(By.XPATH, "//*[@id='result']/div[1]") 
-    driver.implicitly_wait(40)
+    driver.implicitly_wait(20)
     return len(check_sequence) > 0
 
 def genome_scraping(sequence):
@@ -56,12 +58,21 @@ def genome_scraping(sequence):
                                  'None', 'None', 'None', 'None', 'None']
         
 def main():
-    start_rsid = int(input('The start genome num: '))
-    end_rsid = int(input('The ending genome num: '))
+    parser = argparse.ArgumentParser()
+# Add an argument
+    parser.add_argument('--start_id', type=int, required=True)
+    parser.add_argument('--end_id', type=int, required=True)
+    parser.add_argument('--output_path', type=str, required=True)
+    # Parse the argument
+    args = parser.parse_args()
+    start_rsid = args.start_id
+    end_rsid = args.end_id
+    output = args.output_path
     for rsid in range(start_rsid, end_rsid+1):
         sequence = "rs" + str(rsid)
         #print(check_exists(sequence))
         genome_scraping(sequence)
-    df.to_csv('C:/Users/DELL/Desktop/csv_data.csv')
+        print(rsid)
+    df.to_csv(output)
 if __name__ == "__main__":
     main()
