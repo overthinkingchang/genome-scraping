@@ -1,16 +1,17 @@
 import argparse
+import pandas as pd
+
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.common.exceptions import NoSuchElementException
-import pandas as pd
 
 column_list = ['Chrom', 'Pos', 'ID', 'Ref', 'Alt', 'KHV', 'KHV-G',
                'Region', 'Gene', 'Impact', 'AAChange', 'Pos_Grch37']
 df = pd.DataFrame(columns=column_list)
-driver = webdriver.Chrome(r'C:\Users\DELL\Desktop\chromedriver.exe')
+driver = webdriver.Chrome(r'downloads/chromedriver.exe')
 url = 'https://genomes.vn/'
 driver.get(url)
 wait = WebDriverWait(driver, 20)
