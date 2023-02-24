@@ -38,3 +38,8 @@ optional arguments:
   --start_id START_ID
   --end_id END_ID
   --output_path OUTPUT_PATH
+
+Examples:
+```
+genomesvn-crawler --start_id 61737737 --end_id 61737837 --output_path output/test_csv_data.csv
+```
