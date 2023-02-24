@@ -4,12 +4,18 @@ version = "0.1.0"
 description = "Collect SNP information from genomes.vn following list of rsID"
 authors = ["Trang Nguyen <trang.nguyen.200150@student.fulbright.edu.vn>, Anh-Vu Mai-Nguyen <mainguyenanhvu@gmail.com>"]
 readme = "README.md"
-packages = [{include = "genomesvn_crawler"}]
+packages = [ 
+            {include = "constant_variables", from = "constants"}
+            ]
 
 [tool.poetry.dependencies]
-python = "^3.7"
-
+python = "^3.8"
+pandas = "^1.3.5"
+selenium = "^4.5.0"
 
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+genomesvn-crawler = "src.genomesvn_crawler:main"
