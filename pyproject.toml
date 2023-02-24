@@ -5,7 +5,8 @@ description = "Collect SNP information from genomes.vn following list of rsID"
 authors = ["Trang Nguyen <trang.nguyen.200150@student.fulbright.edu.vn>, Anh-Vu Mai-Nguyen <mainguyenanhvu@gmail.com>"]
 readme = "README.md"
 packages = [ 
-            {include = "constant_variables", from = "constants"}
+            {include = "constants"},
+            {include = "src"},
             ]
 
 [tool.poetry.dependencies]
