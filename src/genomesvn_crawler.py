@@ -1,6 +1,6 @@
 import pandas as pd
 from constants.constant_variables import COLUMN_LIST, URL, WAIT_LARGE_TIME
-from genomesvn_crawler_helper import initialize_parameters
+from src.genomesvn_crawler_helper import initialize_parameters
 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
