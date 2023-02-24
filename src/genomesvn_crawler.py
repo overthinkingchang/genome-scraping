@@ -1,5 +1,5 @@
 import pandas as pd
-from constants.constant_variables import COLUMN_LIST, URL, WAIT_LARGE_TIME
+from constants.constant_variables import CHOME_DRIVER, COLUMN_LIST, URL, WAIT_LARGE_TIME
 from src.genomesvn_crawler_helper import initialize_parameters
 
 from selenium import webdriver
@@ -75,7 +75,7 @@ def main():
     end_rsid = options.end_id
     output = options.output_path
     df = pd.DataFrame(columns=COLUMN_LIST)
-    driver = webdriver.Chrome()
+    driver = webdriver.Chrome(CHOME_DRIVER)
     driver.get(URL)
     WebDriverWait(driver, WAIT_LARGE_TIME)
 
