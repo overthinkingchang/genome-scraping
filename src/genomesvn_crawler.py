@@ -1,13 +1,15 @@
+import sys
+sys.path.append("F:\\genome-scraping-main\\genome-scraping-main")
 import pandas as pd
 from constants.constant_variables import CHOME_DRIVER, COLUMN_LIST, URL, WAIT_LARGE_TIME
-from src.genomesvn_crawler_helper import initialize_parameters
-
+from src.genomesvn_crawler_helper import initialize_parameters, option, file_input 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
+import os
 
 
-def genome_scraping(df, driver, rsid_query):
+def genome_scraping(output_path, driver, rsid_query):
     if (check_exists(driver, rsid_query)):
         Chrom_value, Pos_value, ID_value, Ref_value, Pos_value_grch37 = get_chr_pos_id_ref(
             driver)
@@ -26,11 +28,20 @@ def genome_scraping(df, driver, rsid_query):
                                 'AAChange': 0}
             for index, key in enumerate(small_value_dict.keys()):
                 small_value_dict[key] = small_entries_index[index]
-            df.loc[len(df.index)] = [Chrom_value, Pos_value, ID_value, Ref_value, Alt, small_value_dict['KHV'], small_value_dict['KHVG'],
-                                     small_value_dict['Region'], small_value_dict['Gene'], small_value_dict['Impact'], small_value_dict['AAChange'], Pos_value_grch37]
+            
+            #df.loc[len(df.index)] = [Chrom_value, Pos_value, ID_value, Ref_value, Alt, small_value_dict['KHV'], small_value_dict['KHVG'],
+            #                         small_value_dict['Region'], small_value_dict['Gene'], small_value_dict['Impact'], small_value_dict['AAChange'], Pos_value_grch37]
+            KHV = small_value_dict['KHV']
+            KHVG = small_value_dict['KHVG']
+            Region = small_value_dict['Region']
+            Gene = small_value_dict['Gene']
+            Impact = small_value_dict['Impact']
+            AAChange = small_value_dict['AAChange']
+            os.system("echo '$Chrom_value, $Pos_value, $ID_value, $Ref_value, $Alt, $KHV, $KHVG, $Region, $Gene, $Impact, $AAChange, $Pos_value_grch37'>> $output_path")
     else:
-        df.loc[len(df.index)] = ['None', 'None', rsid_query, 'None', 'None', 'None',
-                                 'None', 'None', 'None', 'None', 'None', 'None']
+        #df.loc[len(df.index)] = ['None', 'None', rsid_query, 'None', 'None', 'None',
+        #                         'None', 'None', 'None', 'None', 'None', 'None']
+        os.system("echo 'None, None, $ID_value, None, None, None, None, None, None, None, None, None'>> $output_path")
 
 
 def check_exists(driver, rsid_query):
@@ -69,21 +80,32 @@ def get_chr_pos_id_ref(driver):
     return Chrom_value, Pos_value, ID_value, Ref_value, Pos_value_grch37
 
 
+
+
 def main():
-    options = initialize_parameters()
-    start_rsid = options.start_id
-    end_rsid = options.end_id
-    output = options.output_path
     df = pd.DataFrame(columns=COLUMN_LIST)
     driver = webdriver.Chrome(CHOME_DRIVER)
     driver.get(URL)
     WebDriverWait(driver, WAIT_LARGE_TIME)
-
-    for rsid in range(start_rsid, end_rsid+1):
-        rsid_query = "rs" + str(rsid)
-        genome_scraping(df, driver, rsid_query)
-    df.to_csv(output)
+    options_input = option()
+    if options_input.input == 'loop':
+        options = initialize_parameters()
+        start_rsid = options.start_id
+        end_rsid = options.end_id
+        output_path = options.output_path
+        for rsid in range(start_rsid, end_rsid+1):
+            rsid_query = "rs" + str(rsid)
+            genome_scraping(output_path, driver, rsid_query)
+        #df.to_csv(output)
+    else:
+        input1 = file_input()
+        file1 = open(input1.filepath, "r")
+        output_path = input1.output_path
+        for rsid in file1:
+            genome_scraping(output_path, driver, rsid)
+        #df.to_csv(output)
 
 
 if __name__ == "__main__":
     main()
+ 
