@@ -2,7 +2,7 @@ import sys
 sys.path.append("F:\\genome-scraping-main\\genome-scraping-main")
 import pandas as pd
 from constants.constant_variables import CHOME_DRIVER, COLUMN_LIST, URL, WAIT_LARGE_TIME
-from src.genomesvn_crawler_helper import initialize_parameters, option, file_input 
+from src.genomesvn_crawler_helper import initialize_parameters 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
@@ -87,20 +87,18 @@ def main():
     driver = webdriver.Chrome(CHOME_DRIVER)
     driver.get(URL)
     WebDriverWait(driver, WAIT_LARGE_TIME)
-    options_input = option()
-    if options_input.input == 'loop':
-        options = initialize_parameters()
-        start_rsid = options.start_id
-        end_rsid = options.end_id
-        output_path = options.output_path
+    options = initialize_parameters()
+    start_rsid = options.start_id
+    end_rsid = options.end_id
+    file_path = options.filepath
+    output_path = options.output_path
+    if file_path == "None":
         for rsid in range(start_rsid, end_rsid+1):
             rsid_query = "rs" + str(rsid)
             genome_scraping(output_path, driver, rsid_query)
-        #df.to_csv(output)
+            #df.to_csv(output)
     else:
-        input1 = file_input()
-        file1 = open(input1.filepath, "r")
-        output_path = input1.output_path
+        file1 = open(file_path, "r")
         for rsid in file1:
             genome_scraping(output_path, driver, rsid)
         #df.to_csv(output)
