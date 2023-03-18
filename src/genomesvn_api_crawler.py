@@ -28,17 +28,18 @@ def get_info_from_api(json_data, reference_genome):
     return rows
 
 def get_rsid_info_from_api(data, rsid, reference_genome):
-    info_row = [['None', 'None', rsid, 'None', 'None', 'None', 'None', 'None', 'None', 'None', 'None', reference_genome]]
+    info_rows = [['None', 'None', rsid, 'None', 'None', 'None', 'None', 'None', 'None', 'None', 'None', reference_genome]]
     parse_json = json.loads(data)
     if is_not_found(parse_json) == False:
-        info_row = get_info_from_api(parse_json, reference_genome)
-    return info_row
+        info_rows = get_info_from_api(parse_json, reference_genome)
+    return info_rows
 
 def query_by_api(options, rsid_list):
     with open(options.output_path, mode='w') as output_file:
         output_writer = csv.writer(output_file, delimiter=',')
         output_writer.writerow(COLUMN_LIST)
         for rsid in rsid_list:
+            print(rsid)
             response_API = requests.get(
                 API_URL + rsid + '&ref='+options.reference_genome)
             data = response_API.text
