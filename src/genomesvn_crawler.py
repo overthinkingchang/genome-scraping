@@ -1,12 +1,10 @@
-import sys
-sys.path.append("F:\\genome-scraping-main\\genome-scraping-main")
+import os
 import pandas as pd
 from constants.constant_variables import CHOME_DRIVER, COLUMN_LIST, URL, WAIT_LARGE_TIME
 from src.genomesvn_crawler_helper import initialize_parameters 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.wait import WebDriverWait
-import os
 
 
 def genome_scraping(output_path, driver, rsid_query):
